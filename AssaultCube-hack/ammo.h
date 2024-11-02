@@ -1,30 +1,39 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include "memory.h"
+#include "offsets.h"
 
 class Ammo{
 public:
+	struct Data{
+		std::string name;
+		int defaultValue;
+		uintptr_t address;
+	};
+
 private:
-	Memory mem;
-	uintptr_t ammoAddress;
-	const int AMMO = 20;
+	const Memory& mem;
+	const uintptr_t address;
+	std::vector<Data> vec;
 
 public:
-	Ammo(auto& mem, const uintptr_t ammoAddress):
-		mem{mem}, ammoAddress{ammoAddress}{
+	Ammo(const Memory& mem, const uintptr_t address):
+		mem{mem}, address{address}{
+		vec = {
+			{"ASSAULT RIFLE",	20,		address + offsets::assaultRifle},
+			{"PISTOL",			10,		address + offsets::pistol},
+			{"SUBMACHINE",		30,		address + offsets::submachine},
+			{"SNIPER RIFLE",	5,		address + offsets::sniperRifle},
+			{"SHOTGUN",			7,		address + offsets::shotgun},
+			{"CARBINE",			15,		address + offsets::carbine},
+			{"GRENADE",			3,		address + offsets::grenade}
+		};
 	}
 
-	void set(const int newAmmo){
-		mem.Write(ammoAddress, newAmmo);
-	}
-
-	int get()const{
-		return mem.Read<uintptr_t>(ammoAddress);
-	}
-
-	void checkAmmo(){
-		if(get() != AMMO){
-			set(AMMO);
+	void noReaload(){
+		for(const auto& data : vec){
+			mem.Write(data.address, data.defaultValue);
 		}
 	}
 };

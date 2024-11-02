@@ -1,29 +1,32 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include "memory.h"
+#include "offsets.h"
 
 class Health{
 public:
+	struct Data{
+		std::string name;
+		int defaultValue;
+		uintptr_t address;
+	};
 private:
-	Memory mem;
-	uintptr_t healthAddress;
-	const int HEALTH = 1337;
+	const Memory& mem;
+	const uintptr_t address;
+	std::vector<Data> vec;
 
 public:
-	Health(auto& mem, const uintptr_t healthAddress):
-		mem{mem}, healthAddress{healthAddress}{}
-
-	void set(const int newHealth){
-		mem.Write(healthAddress, newHealth);
+	Health(const Memory& mem, const uintptr_t address):
+		mem{mem}, address{address}{
+		vec = {
+			{"HEALTH",	228,	address + offsets::health}
+		};
 	}
 
-	int get()const{
-		return mem.Read<uintptr_t>(healthAddress);
-	}
-
-	void checkHealth(){
-		if(get() != HEALTH){
-			set(HEALTH);
+	void godMode(){
+		for(const auto& data : vec){
+			mem.Write(data.address, data.defaultValue);
 		}
 	}
 };

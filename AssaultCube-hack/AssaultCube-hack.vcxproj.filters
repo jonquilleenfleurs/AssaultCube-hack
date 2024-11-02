@@ -23,5 +23,14 @@
     <ClInclude Include="memory.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ammo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="offsets.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coordinates.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
